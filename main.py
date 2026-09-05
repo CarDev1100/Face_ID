@@ -1,6 +1,3 @@
-import face_recognition
-import pathlib as Path
-
 """
 Face ID: simple facial recognition.
 
@@ -12,6 +9,10 @@ Expected layout - one subfolder per person, named after them:
     Faces/KNOWN_FACES/Elon/photo2.jpg
     Faces/UNKNOWN_FACES/mystery.jpg
 """
+
+from pathlib import Path
+import face_recognition
+import cv2
 
 # Replace the paths below with your own
 known_faces_dir = Path(r"C:\Users\chpro\Desktop\coding\Face_ID\Faces\KNOWN_FACES")
@@ -36,4 +37,9 @@ for filename in unknown_faces_dir.iterdir():
     image = face_recognition.load_image_file(filename)
     encoding = face_recognition.face_encodings(image)[0]
     # 0.6 is the distance tolerance - lower is stricter, higher matches loosely
-    result = face_recognition.compare_faces(known_faces, encoding, 0.6)
+    result = face_recognition.compare_faces(known_faces, encoding, 0.5)
+    if True in result:
+        index = result.index(True)
+        print(filename.stem + " is " + known_names[index])
+    else:
+        print(filename.stem + " is unknown")
